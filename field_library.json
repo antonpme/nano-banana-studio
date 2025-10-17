@@ -1,0 +1,512 @@
+{
+  "presetTypes": {
+    "icon_generation": {
+      "name": "Icon Generation",
+      "description": "Create app icons, brand icons, and UI elements",
+      "suggestedFields": ["style", "subject", "color_scheme", "background", "complexity", "size"],
+      "fieldDefinitions": {
+        "style": {
+          "type": "select",
+          "label": "Icon Style",
+          "options": [
+            "flat design",
+            "3D",
+            "line art",
+            "gradient",
+            "glassmorphism",
+            "neumorphism",
+            "minimalist",
+            "skeuomorphic",
+            "material design"
+          ],
+          "allowCustom": true,
+          "required": true
+        },
+        "subject": {
+          "type": "text",
+          "label": "Icon Subject",
+          "suggestions": [
+            "app icon",
+            "brand icon",
+            "social media icon",
+            "system icon",
+            "toolbar icon"
+          ],
+          "allowCustom": true,
+          "required": true
+        },
+        "color_scheme": {
+          "type": "select",
+          "label": "Color Scheme",
+          "options": [
+            "monochrome",
+            "vibrant colors",
+            "pastel colors",
+            "gradient",
+            "corporate blue",
+            "warm tones",
+            "cool tones",
+            "brand colors"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "background": {
+          "type": "select",
+          "label": "Background Type",
+          "options": [
+            "transparent",
+            "solid color",
+            "gradient background",
+            "textured",
+            "rounded square",
+            "circular"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "complexity": {
+          "type": "select",
+          "label": "Complexity Level",
+          "options": [
+            "minimal",
+            "simple",
+            "moderate detail",
+            "detailed",
+            "highly detailed"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "size": {
+          "type": "select",
+          "label": "Output Size",
+          "options": [
+            "512x512",
+            "1024x1024",
+            "adaptive"
+          ],
+          "allowCustom": true,
+          "required": false
+        }
+      }
+    },
+    "logo_generation": {
+      "name": "Logo Generation",
+      "description": "Design brand logos and corporate identities",
+      "suggestedFields": ["type", "industry", "style", "elements", "mood", "text_treatment", "color_palette"],
+      "fieldDefinitions": {
+        "type": {
+          "type": "select",
+          "label": "Logo Type",
+          "options": [
+            "wordmark",
+            "lettermark",
+            "pictorial mark",
+            "abstract mark",
+            "mascot",
+            "emblem",
+            "combination mark"
+          ],
+          "allowCustom": true,
+          "required": true
+        },
+        "industry": {
+          "type": "select",
+          "label": "Industry/Sector",
+          "options": [
+            "technology",
+            "finance",
+            "healthcare",
+            "creative agency",
+            "retail",
+            "food & beverage",
+            "education",
+            "real estate",
+            "sports",
+            "entertainment"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "style": {
+          "type": "select",
+          "label": "Design Style",
+          "options": [
+            "modern",
+            "minimalist",
+            "vintage",
+            "elegant",
+            "bold",
+            "playful",
+            "professional",
+            "geometric",
+            "organic"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "elements": {
+          "type": "text",
+          "label": "Visual Elements",
+          "suggestions": [
+            "geometric shapes",
+            "nature elements",
+            "abstract forms",
+            "letterforms",
+            "symbolic imagery"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "mood": {
+          "type": "select",
+          "label": "Brand Mood",
+          "options": [
+            "trustworthy",
+            "innovative",
+            "friendly",
+            "luxurious",
+            "energetic",
+            "calm",
+            "authoritative",
+            "creative"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "text_treatment": {
+          "type": "select",
+          "label": "Text Treatment",
+          "options": [
+            "sans-serif",
+            "serif",
+            "script",
+            "custom lettering",
+            "geometric type",
+            "no text"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "color_palette": {
+          "type": "select",
+          "label": "Color Palette",
+          "options": [
+            "monochrome",
+            "two-color",
+            "vibrant",
+            "muted",
+            "gradient",
+            "black and white"
+          ],
+          "allowCustom": true,
+          "required": false
+        }
+      }
+    },
+    "photorealistic": {
+      "name": "Photorealistic Images",
+      "description": "Create lifelike photographs and realistic scenes",
+      "suggestedFields": ["subject", "shot_type", "lighting", "environment", "camera", "mood", "time_of_day", "weather"],
+      "fieldDefinitions": {
+        "subject": {
+          "type": "text",
+          "label": "Main Subject",
+          "suggestions": [
+            "person",
+            "product",
+            "landscape",
+            "architecture",
+            "food",
+            "animal",
+            "vehicle"
+          ],
+          "allowCustom": true,
+          "required": true
+        },
+        "shot_type": {
+          "type": "select",
+          "label": "Shot Type",
+          "options": [
+            "close-up",
+            "extreme close-up",
+            "medium shot",
+            "wide shot",
+            "portrait",
+            "full body",
+            "aerial view",
+            "bird's eye view",
+            "low angle",
+            "high angle"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "lighting": {
+          "type": "select",
+          "label": "Lighting",
+          "options": [
+            "golden hour",
+            "blue hour",
+            "studio soft light",
+            "dramatic lighting",
+            "natural light",
+            "rim light",
+            "volumetric fog",
+            "backlight",
+            "side light",
+            "harsh sunlight"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "environment": {
+          "type": "text",
+          "label": "Environment/Setting",
+          "suggestions": [
+            "studio",
+            "outdoor nature",
+            "urban street",
+            "interior room",
+            "beach",
+            "mountain",
+            "forest",
+            "desert"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "camera": {
+          "type": "select",
+          "label": "Camera/Lens",
+          "options": [
+            "85mm portrait lens",
+            "35mm lens",
+            "24mm wide angle",
+            "200mm telephoto",
+            "macro lens",
+            "fisheye lens",
+            "50mm prime",
+            "tilt-shift"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "mood": {
+          "type": "select",
+          "label": "Mood/Atmosphere",
+          "options": [
+            "dramatic",
+            "peaceful",
+            "mysterious",
+            "vibrant",
+            "melancholic",
+            "epic",
+            "intimate",
+            "cheerful",
+            "moody"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "time_of_day": {
+          "type": "select",
+          "label": "Time of Day",
+          "options": [
+            "sunrise",
+            "morning",
+            "midday",
+            "afternoon",
+            "sunset",
+            "dusk",
+            "night",
+            "midnight"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "weather": {
+          "type": "select",
+          "label": "Weather Conditions",
+          "options": [
+            "clear sky",
+            "cloudy",
+            "overcast",
+            "rainy",
+            "foggy",
+            "snowy",
+            "stormy",
+            "misty"
+          ],
+          "allowCustom": true,
+          "required": false
+        }
+      }
+    },
+    "art_styles": {
+      "name": "Artistic Styles",
+      "description": "Create artwork in various artistic mediums and styles",
+      "suggestedFields": ["medium", "art_style", "subject", "color_palette", "mood", "technique", "era"],
+      "fieldDefinitions": {
+        "medium": {
+          "type": "select",
+          "label": "Art Medium",
+          "options": [
+            "oil painting",
+            "watercolor",
+            "pencil sketch",
+            "charcoal drawing",
+            "pastel",
+            "acrylic painting",
+            "digital art",
+            "mixed media",
+            "ink drawing"
+          ],
+          "allowCustom": true,
+          "required": true
+        },
+        "art_style": {
+          "type": "select",
+          "label": "Art Style",
+          "options": [
+            "impressionist",
+            "realistic",
+            "abstract",
+            "expressionist",
+            "cubist",
+            "surrealist",
+            "anime",
+            "manga",
+            "comic book",
+            "art nouveau",
+            "pop art"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "subject": {
+          "type": "text",
+          "label": "Subject Matter",
+          "suggestions": [
+            "portrait",
+            "landscape",
+            "still life",
+            "abstract composition",
+            "figure study",
+            "fantasy scene"
+          ],
+          "allowCustom": true,
+          "required": true
+        },
+        "color_palette": {
+          "type": "select",
+          "label": "Color Palette",
+          "options": [
+            "warm tones",
+            "cool tones",
+            "monochrome",
+            "vibrant colors",
+            "pastel colors",
+            "earth tones",
+            "high contrast",
+            "muted colors",
+            "complementary colors"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "mood": {
+          "type": "select",
+          "label": "Mood/Feeling",
+          "options": [
+            "serene",
+            "energetic",
+            "melancholic",
+            "whimsical",
+            "dramatic",
+            "peaceful",
+            "intense",
+            "dreamlike"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "technique": {
+          "type": "select",
+          "label": "Technique",
+          "options": [
+            "loose brushwork",
+            "fine detail",
+            "impasto",
+            "glazing",
+            "crosshatching",
+            "stippling",
+            "blending",
+            "dry brush"
+          ],
+          "allowCustom": true,
+          "required": false
+        },
+        "era": {
+          "type": "select",
+          "label": "Historical Era/Movement",
+          "options": [
+            "Renaissance",
+            "Baroque",
+            "Romantic",
+            "Modern",
+            "Contemporary",
+            "Victorian",
+            "Art Deco",
+            "Bauhaus"
+          ],
+          "allowCustom": true,
+          "required": false
+        }
+      }
+    },
+    "custom": {
+      "name": "Custom Template",
+      "description": "Build your own custom prompt structure",
+      "suggestedFields": [],
+      "fieldDefinitions": {}
+    }
+  },
+  "globalFields": {
+    "background_color": {
+      "type": "color",
+      "label": "Background Color",
+      "allowCustom": true,
+      "required": false
+    },
+    "aspect_ratio": {
+      "type": "select",
+      "label": "Aspect Ratio",
+      "options": [
+        "1:1",
+        "16:9",
+        "9:16",
+        "3:2",
+        "2:3",
+        "4:3",
+        "3:4"
+      ],
+      "allowCustom": false,
+      "required": false
+    },
+    "quality": {
+      "type": "select",
+      "label": "Quality/Detail Level",
+      "options": [
+        "draft",
+        "standard",
+        "high quality",
+        "ultra detailed",
+        "8K resolution"
+      ],
+      "allowCustom": true,
+      "required": false
+    }
+  }
+}

@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+*.sqlite3
+.Python
+.DS_Store
+Thumbs.db
+*.log
+
+# Environments
+.env
+.venv/
+venv/
+env/
+pythonenv/
+
+# IDE
+.idea/
+.vscode/
+
+# OS / tooling
+*.swp
+*.swo

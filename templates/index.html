@@ -1,0 +1,2200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nano-Banana Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 40, 200, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(40, 120, 200, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(200, 40, 120, 0.15) 0%, transparent 50%);
+            animation: drift 20s ease-in-out infinite;
+            z-index: 0;
+        }
+        
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(15, 15, 25, 0.8);
+            border-radius: 20px;
+            box-shadow: 
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                0 20px 60px rgba(0, 0, 0, 0.6),
+                0 0 80px rgba(120, 40, 200, 0.2);
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, rgba(120, 40, 200, 0.9) 0%, rgba(40, 120, 200, 0.9) 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 600px;
+        }
+        
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .panel {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .panel:first-child {
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            overflow-y: auto;
+            background: rgba(20, 20, 30, 0.4);
+        }
+        
+        @media (max-width: 1024px) {
+            .panel:first-child {
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            }
+        }
+        
+        .mode-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .mode-tab {
+            padding: 14px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            font-size: 0.95em;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mode-tab::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(120, 40, 200, 0.3), rgba(40, 120, 200, 0.3));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .mode-tab.active {
+            color: white;
+            background: rgba(120, 40, 200, 0.3);
+            box-shadow: 
+                0 0 20px rgba(120, 40, 200, 0.4),
+                inset 0 0 20px rgba(120, 40, 200, 0.2);
+        }
+        
+        .mode-tab.active::before {
+            opacity: 1;
+        }
+        
+        .mode-tab:hover:not(.active) {
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        textarea, select, input[type="file"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+        
+        textarea::placeholder, input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        textarea:focus, select:focus, input[type="file"]:focus {
+            outline: none;
+            border-color: rgba(120, 40, 200, 0.6);
+            box-shadow: 
+                0 0 0 3px rgba(120, 40, 200, 0.15),
+                0 0 20px rgba(120, 40, 200, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .file-upload-area {
+            border: 2px dashed rgba(120, 40, 200, 0.4);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(120, 40, 200, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .file-upload-area::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(120, 40, 200, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .file-upload-area:hover::before {
+            opacity: 1;
+        }
+        
+        .file-upload-area:hover {
+            background: rgba(120, 40, 200, 0.1);
+            border-color: rgba(120, 40, 200, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .file-upload-area.dragging {
+            background: rgba(120, 40, 200, 0.2);
+            border-color: rgba(120, 40, 200, 0.8);
+            transform: scale(1.02);
+        }
+        
+        .file-upload-area p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .file-upload-area small {
+            color: rgba(255, 255, 255, 0.5);
+            display: block;
+            margin-top: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .uploaded-images-wrapper {
+            margin-top: 15px;
+        }
+        
+        .upload-count {
+            font-size: 0.85em;
+            color: rgba(40, 200, 120, 1);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: none;
+            padding: 10px;
+            background: rgba(40, 200, 120, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(40, 200, 120, 0.3);
+            text-align: center;
+        }
+        
+        .upload-count.active {
+            display: block;
+        }
+        
+        .uploaded-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        .uploaded-image {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(40, 200, 120, 0.5);
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(40, 200, 120, 0.2);
+            transition: transform 0.3s;
+        }
+        
+        .uploaded-image:hover {
+            transform: translateY(-4px);
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.6),
+                0 0 30px rgba(40, 200, 120, 0.3);
+        }
+        
+        .uploaded-image-content {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            overflow: hidden;
+        }
+        
+        .uploaded-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .uploaded-image-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px;
+            font-size: 0.75em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+        }
+        
+        .uploaded-image .remove {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 2;
+            transition: all 0.2s;
+            padding: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        .uploaded-image .remove:hover {
+            background: rgba(220, 53, 69, 1);
+            transform: scale(1.1);
+        }
+        
+        button {
+            background: linear-gradient(135deg, rgba(120, 40, 200, 0.8) 0%, rgba(40, 120, 200, 0.8) 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        button:hover:not(:disabled)::before {
+            opacity: 1;
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 10px 30px rgba(120, 40, 200, 0.4),
+                0 0 40px rgba(120, 40, 200, 0.3);
+        }
+        
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        .button-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 20px;
+        }
+        
+        .button-row button {
+            margin: 0;
+        }
+        
+        .results-panel {
+            display: flex;
+            flex-direction: column;
+            background: rgba(10, 10, 20, 0.4);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .loading.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: conic-gradient(transparent, rgba(120, 40, 200, 0.8));
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .spinner::before {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            background: rgba(15, 15, 25, 0.9);
+            border-radius: 50%;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1em;
+        }
+        
+        .error {
+            background: rgba(220, 53, 69, 0.15);
+            border-left: 4px solid rgba(220, 53, 69, 0.8);
+            color: rgba(255, 100, 120, 1);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+        
+        .error.active {
+            display: block;
+        }
+        
+        .results {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .results.active {
+            display: flex;
+        }
+        
+        .image-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 0 60px rgba(120, 40, 200, 0.1);
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+            border-radius: 8px;
+        }
+        
+        .response-text {
+            background: rgba(120, 40, 200, 0.1);
+            border-left: 3px solid rgba(120, 40, 200, 0.6);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid rgba(120, 40, 200, 0.2);
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, rgba(40, 200, 120, 0.8) 0%, rgba(40, 120, 200, 0.8) 100%);
+        }
+        
+        .download-btn:hover {
+            box-shadow: 
+                0 10px 30px rgba(40, 200, 120, 0.4),
+                0 0 40px rgba(40, 200, 120, 0.3);
+        }
+        
+        .refine-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .refine-section h3 {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .refine-input {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+        }
+        
+        .refine-input textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        
+        .refine-input button {
+            align-self: flex-end;
+        }
+        
+        .iteration-counter {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 10px;
+            text-align: center;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍌 Nano-Banana Studio</h1>
+            <p>Text-to-Image • Image Editing • Multi-Image Composition</p>
+        </div>
+        
+        <div class="content">
+            <!-- LEFT PANEL: CONTROLS -->
+            <div class="panel">
+                <!-- Mode Tabs -->
+                <div class="mode-tabs">
+                    <button class="mode-tab active" data-mode="text-to-image" onclick="switchMode('text-to-image')">
+                        🎨 Generate
+                    </button>
+                    <button class="mode-tab" data-mode="image-edit" onclick="switchMode('image-edit')">
+                        ✏️ Edit
+                    </button>
+                    <button class="mode-tab" data-mode="multi-image-compose" onclick="switchMode('multi-image-compose')">
+                        🖼️ Compose
+                    </button>
+                </div>
+                
+                <!-- TEXT-TO-IMAGE MODE -->
+                <div class="form-section text-to-image active">
+                    <div class="form-group">
+                        <label for="style-preset">Style Preset</label>
+                        <div style="display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center;">
+                            <select id="style-preset" onchange="applyStylePreset()" style="flex: 1;">
+                                <option value="">None (Custom)</option>
+                            </select>
+                            <button onclick="managePresets()" style="padding: 10px 16px; font-size: 0.95em; display: flex; align-items: center; gap: 6px; background: rgba(120, 40, 200, 0.3); border: 1px solid rgba(120, 40, 200, 0.5); border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(120, 40, 200, 0.5)'" onmouseout="this.style.background='rgba(120, 40, 200, 0.3)'">
+                                <span>⚙️</span>
+                                <span style="font-size: 0.9em; font-weight: 500;">Manage</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="prompt-generate">Your Prompt *</label>
+                        <textarea id="prompt-generate" placeholder="Describe the image you want to create in detail..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Style Reference Image (Optional)</label>
+                        <div class="file-upload-area" id="style-upload-area" onclick="document.getElementById('style-image-input').click()">
+                            <p>Click or drag style reference here</p>
+                            <small>This will be combined with your prompt</small>
+                        </div>
+                        <input type="file" id="style-image-input" accept="image/*" style="display: none;" onchange="handleImageUpload('generate', this)">
+                        <div class="uploaded-images-wrapper">
+                            <div class="upload-count" id="generate-count"></div>
+                            <div class="uploaded-images" id="generate-uploaded"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="aspect-ratio">Aspect Ratio</label>
+                        <select id="aspect-ratio">
+                            <option value="1:1">Square (1:1)</option>
+                            <option value="16:9">Widescreen (16:9)</option>
+                            <option value="9:16">Portrait (9:16)</option>
+                            <option value="3:2">Standard (3:2)</option>
+                            <option value="2:3">Standard Portrait (2:3)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="button-row">
+                        <button onclick="generateImage('text-to-image')">Generate</button>
+                        <button onclick="clearForm('text-to-image')" style="background: #999;">Clear</button>
+                    </div>
+                </div>
+                
+                <!-- IMAGE-EDIT MODE -->
+                <div class="form-section image-edit">
+                    <div class="form-group">
+                        <label>Upload Image to Edit *</label>
+                        <div class="file-upload-area" id="edit-upload-area" onclick="document.getElementById('edit-image-input').click()">
+                            <p>Click or drag image here</p>
+                            <small>PNG, JPG, GIF up to 50MB</small>
+                        </div>
+                        <input type="file" id="edit-image-input" accept="image/*" style="display: none;" onchange="handleImageUpload('edit', this)">
+                        <div class="uploaded-images-wrapper">
+                            <div class="upload-count" id="edit-count"></div>
+                            <div class="uploaded-images" id="edit-uploaded"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="prompt-edit">Edit Instructions *</label>
+                        <textarea id="prompt-edit" placeholder="Describe what you want to change. E.g., 'Change the sky to purple', 'Add a sunset', 'Make it more cartoon-like'"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="aspect-ratio-edit">Aspect Ratio</label>
+                        <select id="aspect-ratio-edit">
+                            <option value="1:1">Square (1:1)</option>
+                            <option value="16:9">Widescreen (16:9)</option>
+                            <option value="9:16">Portrait (9:16)</option>
+                            <option value="3:2">Standard (3:2)</option>
+                            <option value="2:3">Standard Portrait (2:3)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="button-row">
+                        <button onclick="generateImage('image-edit')">Edit Image</button>
+                        <button onclick="clearForm('image-edit')" style="background: #999;">Clear</button>
+                    </div>
+                </div>
+                
+                <!-- MULTI-IMAGE COMPOSE MODE -->
+                <div class="form-section multi-image-compose">
+                    <div class="form-group">
+                        <label>Upload Images (2+) *</label>
+                        <div class="file-upload-area" id="compose-upload-area" onclick="document.getElementById('compose-image-input').click()">
+                            <p>Click or drag images here</p>
+                            <small>PNG, JPG, GIF up to 50MB each</small>
+                        </div>
+                        <input type="file" id="compose-image-input" accept="image/*" multiple style="display: none;" onchange="handleImageUpload('compose', this)">
+                        <div class="uploaded-images-wrapper">
+                            <div class="upload-count" id="compose-count"></div>
+                            <div class="uploaded-images" id="compose-uploaded"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="prompt-compose">Composition Instructions *</label>
+                        <textarea id="prompt-compose" placeholder="Describe how to combine the images. E.g., 'Merge these into one scene', 'Transfer the style of image 1 to image 2', 'Create a composite landscape'"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="aspect-ratio-compose">Aspect Ratio</label>
+                        <select id="aspect-ratio-compose">
+                            <option value="1:1">Square (1:1)</option>
+                            <option value="16:9">Widescreen (16:9)</option>
+                            <option value="9:16">Portrait (9:16)</option>
+                            <option value="3:2">Standard (3:2)</option>
+                            <option value="2:3">Standard Portrait (2:3)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="button-row">
+                        <button onclick="generateImage('multi-image-compose')">Compose</button>
+                        <button onclick="clearForm('multi-image-compose')" style="background: #999;">Clear</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- RIGHT PANEL: RESULTS -->
+            <div class="panel results-panel">
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Creating your image...</p>
+                </div>
+                
+                <div class="error" id="error"></div>
+                
+                <div class="results" id="results">
+                    <div class="image-container" id="image-container">
+                        <img id="generated-image" src="" alt="Generated image">
+                    </div>
+                    <div class="response-text" id="response-text"></div>
+                    <button class="download-btn" onclick="downloadImage()" style="margin-bottom: 10px;">📥 Download Image</button>
+                    
+                    <div class="refine-section" id="refine-section">
+                        <h3>Iterative Refinement</h3>
+                        <div class="refine-input">
+                            <textarea id="refine-prompt" placeholder="Make adjustments to the image..."></textarea>
+                            <button onclick="refineImage()" style="background: #667eea;">Refine</button>
+                        </div>
+                        <div class="iteration-counter" id="iteration-counter"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Style Preset Manager Modal -->
+    <!-- ==================== DRAWER SYSTEM FOR PRESET MANAGEMENT ==================== -->
+    
+    <!-- Level 1: Main Drawer - Preset List -->
+    <div id="preset-drawer" style="position: fixed; top: 0; right: -650px; width: 650px; height: 100vh; background: rgba(12, 12, 18, 0.98); box-shadow: -8px 0 32px rgba(0, 0, 0, 0.6); z-index: 2000; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; border-left: 1px solid rgba(120, 40, 200, 0.25);">
+        <!-- Header -->
+        <div style="position: sticky; top: 0; background: rgba(15, 15, 22, 0.95); padding: 16px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); z-index: 10; display: flex; align-items: center; gap: 12px;">
+            <button onclick="closePresetDrawer()" aria-label="Close" style="background: none; border: none; color: rgba(255, 255, 255, 0.7); cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; min-width: 44px; min-height: 44px;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+            <h2 style="color: white; margin: 0; font-size: 1.2em; font-weight: 600; letter-spacing: 0.3px; flex: 1;">Style Presets</h2>
+            <button onclick="openPresetEditor(null)" aria-label="New Preset" style="background: rgba(120, 40, 200, 0.15); border: 1px solid rgba(120, 40, 200, 0.3); color: white; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 0.9em; display: flex; align-items: center; gap: 6px; transition: all 0.2s; min-height: 44px;" onmouseover="this.style.background='rgba(120, 40, 200, 0.25)'" onmouseout="this.style.background='rgba(120, 40, 200, 0.15)'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                <span>New</span>
+            </button>
+        </div>
+        
+        <!-- Content -->
+        <div id="preset-list" style="padding: 20px;">
+            <!-- Preset cards will be rendered here -->
+        </div>
+    </div>
+    
+    <!-- Level 2: Preset Editor Drawer -->
+    <div id="preset-editor-drawer" style="position: fixed; top: 0; right: -650px; width: 650px; height: 100vh; background: rgba(12, 12, 18, 0.98); box-shadow: -8px 0 32px rgba(0, 0, 0, 0.6); z-index: 2001; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; border-left: 1px solid rgba(120, 40, 200, 0.25);">
+        <!-- Header -->
+        <div style="position: sticky; top: 0; background: rgba(15, 15, 22, 0.95); padding: 16px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); z-index: 10; display: flex; align-items: center; gap: 12px;">
+            <div style="display: flex; gap: 8px;">
+                <button onclick="closePresetEditor()" aria-label="Back" style="background: none; border: none; color: rgba(255, 255, 255, 0.7); cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; min-width: 44px; min-height: 44px;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button onclick="closeAllDrawers()" aria-label="Close" style="background: none; border: none; color: rgba(255, 255, 255, 0.7); cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; min-width: 44px; min-height: 44px;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <h2 style="color: white; margin: 0; font-size: 1.2em; font-weight: 600; letter-spacing: 0.3px; flex: 1;" id="preset-editor-title">Create Preset</h2>
+            <button onclick="saveCurrentPreset()" aria-label="Save Preset" style="background: rgba(120, 40, 200, 0.15); border: 1px solid rgba(120, 40, 200, 0.3); color: white; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 0.9em; display: flex; align-items: center; gap: 6px; transition: all 0.2s; min-height: 44px;" onmouseover="this.style.background='rgba(120, 40, 200, 0.25)'" onmouseout="this.style.background='rgba(120, 40, 200, 0.15)'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Save</span>
+            </button>
+        </div>
+        
+        <!-- Content -->
+        <div style="padding: 20px;">
+            <!-- Preset Type Selection -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; margin-bottom: 8px; color: rgba(255, 255, 255, 0.7); font-weight: 500; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.8px;">Preset Type *</label>
+                <select id="preset-type" onchange="changePresetType(this.value)" style="width: 100%; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; background: rgba(0, 0, 0, 0.3); color: white; font-size: 0.95em; font-family: Inter, sans-serif;">
+                    <option value="photorealistic">Photorealistic Images</option>
+                    <option value="art_styles">Artistic Styles</option>
+                    <option value="icon_generation">Icon Generation</option>
+                    <option value="logo_generation">Logo Generation</option>
+                    <option value="custom">Custom Template</option>
+                </select>
+                <small id="preset-type-description" style="color: rgba(255, 255, 255, 0.4); display: block; margin-top: 6px; font-size: 0.85em; line-height: 1.4;">Create lifelike photographs and realistic scenes</small>
+            </div>
+            
+            <!-- Preset Name -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; margin-bottom: 8px; color: rgba(255, 255, 255, 0.7); font-weight: 500; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.8px;">Preset Name *</label>
+                <input type="text" id="preset-name" placeholder="e.g., Cinematic Portrait" style="width: 100%; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; background: rgba(0, 0, 0, 0.3); color: white; font-size: 0.95em; font-family: Inter, sans-serif;">
+            </div>
+            
+            <!-- Output Format -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; margin-bottom: 8px; color: rgba(255, 255, 255, 0.7); font-weight: 500; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.8px;">Output Format *</label>
+                <input type="hidden" id="preset-output-format" value="text">
+                <div style="display: flex; gap: 12px;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 12px 16px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 4px; transition: all 0.2s; flex: 1;" onmouseover="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.borderColor='rgba(255, 255, 255, 0.12)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.borderColor='rgba(255, 255, 255, 0.08)'">
+                        <input type="radio" name="output-format" value="text" id="format-text-radio" checked onchange="setOutputFormat('text')" style="width: 18px; height: 18px; cursor: pointer; accent-color: rgb(120, 40, 200);">
+                        <span style="color: white; font-size: 0.9em; font-weight: 500;">Plain Text</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 12px 16px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 4px; transition: all 0.2s; flex: 1;" onmouseover="this.style.background='rgba(255, 255, 255, 0.06)'; this.style.borderColor='rgba(255, 255, 255, 0.12)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.borderColor='rgba(255, 255, 255, 0.08)'">
+                        <input type="radio" name="output-format" value="json" id="format-json-radio" onchange="setOutputFormat('json')" style="width: 18px; height: 18px; cursor: pointer; accent-color: rgb(120, 40, 200);">
+                        <span style="color: white; font-size: 0.9em; font-weight: 500;">JSON</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Fields Section -->
+            <div style="margin-bottom: 24px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <label style="color: rgba(255, 255, 255, 0.7); font-weight: 500; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.8px;">Prompt Fields</label>
+                    <button onclick="openFieldBrowser()" aria-label="Add Field" style="background: rgba(40, 200, 120, 0.15); border: 1px solid rgba(40, 200, 120, 0.3); color: rgb(40, 200, 120); padding: 8px 14px; border-radius: 4px; cursor: pointer; font-size: 0.85em; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: all 0.2s; min-height: 36px;" onmouseover="this.style.background='rgba(40, 200, 120, 0.25)'" onmouseout="this.style.background='rgba(40, 200, 120, 0.15)'">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+                        <span>Add Field</span>
+                    </button>
+                </div>
+                <div id="prompt-fields-list" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 4px; background: rgba(0, 0, 0, 0.3); min-height: 120px;">
+                    <div style="color: rgba(255, 255, 255, 0.3); text-align: center; padding: 24px; font-size: 0.9em; line-height: 1.5;">No fields added yet.<br><small style="font-size: 0.85em; opacity: 0.7;">Click "Add Field" to start building</small></div>
+                </div>
+            </div>
+            
+            <!-- Prompt Preview -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; margin-bottom: 8px; color: rgba(255, 255, 255, 0.7); font-weight: 500; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.8px;">Prompt Preview</label>
+                <textarea id="preset-prompt-preview" readonly style="width: 100%; min-height: 100px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 4px; background: rgba(0, 0, 0, 0.4); color: rgba(100, 200, 255, 0.85); font-size: 0.85em; font-family: 'Courier New', monospace; line-height: 1.5; resize: vertical;" placeholder="Template preview..."></textarea>
+            </div>
+            
+            <!-- Background & Aspect Ratio -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                <div>
+                    <label style="display: block; margin-bottom: 8px; color: rgba(255, 255, 255, 0.7); font-weight: 500; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.8px;">Background</label>
+                    <input type="text" id="preset-background-color" placeholder="#FFFFFF or empty" style="width: 100%; padding: 10px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; background: rgba(0, 0, 0, 0.3); color: white; font-size: 0.9em; font-family: monospace;">
+                    <label style="display: flex; align-items: center; gap: 8px; margin-top: 10px; cursor: pointer;">
+                        <input type="checkbox" id="preset-background-transparent" style="width: 16px; height: 16px; cursor: pointer; accent-color: rgb(120, 40, 200);">
+                        <span style="color: rgba(255, 255, 255, 0.6); font-size: 0.85em;">Transparent</span>
+                    </label>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 8px; color: rgba(255, 255, 255, 0.7); font-weight: 500; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.8px;">Aspect Ratio</label>
+                    <select id="preset-aspect-ratio" style="width: 100%; padding: 10px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; background: rgba(0, 0, 0, 0.3); color: white; font-size: 0.9em; font-family: Inter, sans-serif;">
+                        <option value="1:1">1:1 Square</option>
+                        <option value="16:9">16:9 Wide</option>
+                        <option value="9:16">9:16 Portrait</option>
+                        <option value="3:2">3:2 Standard</option>
+                        <option value="2:3">2:3 Portrait</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Tags -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; margin-bottom: 8px; color: rgba(255, 255, 255, 0.7); font-weight: 500; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.8px;">Tags</label>
+                <input type="text" id="preset-tags" placeholder="portrait, professional, dramatic" style="width: 100%; padding: 10px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; background: rgba(0, 0, 0, 0.3); color: white; font-size: 0.9em; font-family: Inter, sans-serif;">
+                <small style="color: rgba(255, 255, 255, 0.4); display: block; margin-top: 6px; font-size: 0.8em;">Comma-separated keywords</small>
+            </div>
+            
+            <!-- Reference Image -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; margin-bottom: 8px; color: rgba(255, 255, 255, 0.7); font-weight: 500; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.8px;">Style Reference</label>
+                <input type="file" id="preset-image-input" accept="image/*" onchange="handlePresetImageUpload()" style="display: none;">
+                <button onclick="document.getElementById('preset-image-input').click()" style="width: 100%; padding: 12px; background: rgba(80, 120, 200, 0.12); border: 1px solid rgba(80, 120, 200, 0.25); color: rgba(150, 180, 255, 0.9); border-radius: 4px; cursor: pointer; font-size: 0.9em; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.background='rgba(80, 120, 200, 0.2)'" onmouseout="this.style.background='rgba(80, 120, 200, 0.12)'">Upload Reference Image</button>
+                <div id="preset-image-preview" style="margin-top: 12px;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Level 3: Field Editor Drawer -->
+    <div id="field-editor-drawer" style="position: fixed; top: 0; right: -650px; width: 650px; height: 100vh; background: rgba(12, 12, 18, 0.98); box-shadow: -8px 0 32px rgba(0, 0, 0, 0.6); z-index: 2002; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; border-left: 1px solid rgba(120, 40, 200, 0.25);">
+        <!-- Header -->
+        <div style="position: sticky; top: 0; background: rgba(15, 15, 22, 0.95); padding: 16px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); z-index: 10; display: flex; align-items: center; gap: 12px;">
+            <div style="display: flex; gap: 8px;">
+                <button onclick="closeFieldEditor()" aria-label="Back" style="background: none; border: none; color: rgba(255, 255, 255, 0.7); cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; min-width: 44px; min-height: 44px;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button onclick="closeAllDrawers()" aria-label="Close" style="background: none; border: none; color: rgba(255, 255, 255, 0.7); cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; min-width: 44px; min-height: 44px;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <h2 style="color: white; margin: 0; font-size: 1.2em; font-weight: 600; letter-spacing: 0.3px; flex: 1;" id="field-editor-title">Edit Field</h2>
+            <button onclick="deleteCurrentField()" aria-label="Delete Field" style="background: rgba(200, 40, 80, 0.15); border: 1px solid rgba(200, 40, 80, 0.3); color: rgb(200, 40, 80); padding: 10px 16px; border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 0.9em; display: flex; align-items: center; gap: 6px; transition: all 0.2s; min-height: 44px; margin-right: 8px;" onmouseover="this.style.background='rgba(200, 40, 80, 0.25)'" onmouseout="this.style.background='rgba(200, 40, 80, 0.15)'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2m3 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6h14z"/></svg>
+                <span>Delete</span>
+            </button>
+            <button onclick="saveFieldEdit()" aria-label="Save Field" style="background: rgba(120, 40, 200, 0.15); border: 1px solid rgba(120, 40, 200, 0.3); color: white; padding: 10px 16px; border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 0.9em; display: flex; align-items: center; gap: 6px; transition: all 0.2s; min-height: 44px;" onmouseover="this.style.background='rgba(120, 40, 200, 0.25)'" onmouseout="this.style.background='rgba(120, 40, 200, 0.15)'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Save</span>
+            </button>
+        </div>
+        
+        <!-- Content -->
+        <div id="field-editor-content" style="padding: 20px;">
+            <!-- Field editor form will be rendered here -->
+        </div>
+    </div>
+    
+    <!-- Level 4: Field Browser Drawer -->
+    <div id="field-browser-drawer" style="position: fixed; top: 0; right: -650px; width: 650px; height: 100vh; background: rgba(12, 12, 18, 0.98); box-shadow: -8px 0 32px rgba(0, 0, 0, 0.6); z-index: 2003; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; border-left: 1px solid rgba(120, 40, 200, 0.25);">
+        <!-- Header -->
+        <div style="position: sticky; top: 0; background: rgba(15, 15, 22, 0.95); padding: 16px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); z-index: 10; display: flex; align-items: center; gap: 12px;">
+            <div style="display: flex; gap: 8px;">
+                <button onclick="closeFieldBrowser()" aria-label="Back" style="background: none; border: none; color: rgba(255, 255, 255, 0.7); cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; min-width: 44px; min-height: 44px;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button onclick="closeAllDrawers()" aria-label="Close" style="background: none; border: none; color: rgba(255, 255, 255, 0.7); cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; min-width: 44px; min-height: 44px;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255, 255, 255, 0.7)'">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <h2 style="color: white; margin: 0; font-size: 1.2em; font-weight: 600; letter-spacing: 0.3px; flex: 1;">Add Fields</h2>
+            <input type="text" id="field-search" placeholder="Search fields..." style="width: 200px; padding: 8px 12px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; color: white; font-size: 0.85em; font-family: Inter, sans-serif;" oninput="filterFieldBrowser(this.value)">
+        </div>
+        
+        <!-- Content -->
+        <div id="field-browser-content" style="padding: 20px;">
+            <!-- Available fields will be rendered here as clickable chips -->
+        </div>
+    </div>
+    
+    <!-- Backdrop for drawers -->
+    <div id="drawer-backdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 1999; backdrop-filter: blur(3px);" onclick="closeAllDrawers()"></div>
+    
+    <script>
+        let currentMode = 'text-to-image';
+        let currentImageId = null;
+        let currentSessionId = null;
+        let iterationCount = 0;
+        let uploadedImages = {
+            'text-to-image': [],
+            'image-edit': [],
+            'multi-image-compose': []
+        };
+        let uploadedFileNames = {
+            'text-to-image': [],
+            'image-edit': [],
+            'multi-image-compose': []
+        };
+        let uploadedFileSizes = {
+            'text-to-image': [],
+            'image-edit': [],
+            'multi-image-compose': []
+        };
+        
+        // ============================================
+        // DRAWER CONTROL FUNCTIONS
+        // ============================================
+        
+        // Open Level 1: Preset List
+        function openPresetDrawer() {
+            document.getElementById('drawer-backdrop').style.display = 'block';
+            document.getElementById('preset-drawer').style.right = '0';
+            renderPresetList();
+        }
+        
+        function closePresetDrawer() {
+            document.getElementById('preset-drawer').style.right = '-650px';
+            setTimeout(() => {
+                document.getElementById('drawer-backdrop').style.display = 'none';
+            }, 300);
+        }
+        
+        // Open Level 2: Preset Editor
+        function openPresetEditor(presetId) {
+            document.getElementById('preset-editor-drawer').style.right = '0';
+            if (presetId) {
+                loadPresetForEditing(presetId);
+            } else {
+                resetPresetForm();
+            }
+        }
+        
+        function closePresetEditor() {
+            document.getElementById('preset-editor-drawer').style.right = '-650px';
+        }
+        
+        // Open Level 3: Field Editor
+        function openFieldEditor(fieldId) {
+            document.getElementById('field-editor-drawer').style.right = '0';
+            loadFieldForEditing(fieldId);
+        }
+        
+        function closeFieldEditor() {
+            document.getElementById('field-editor-drawer').style.right = '-650px';
+        }
+        
+        // Open Level 4: Field Browser
+        function openFieldBrowser() {
+            const presetType = document.getElementById('preset-type').value;
+            if (!presetType) {
+                showError('Please select a preset type first');
+                return;
+            }
+            
+            renderFieldBrowserContent(presetType);
+            document.getElementById('field-browser-drawer').style.right = '0';
+        }
+        
+        function closeFieldBrowser() {
+            document.getElementById('field-browser-drawer').style.right = '-650px';
+            // Clear search
+            document.getElementById('field-search').value = '';
+        }
+        
+        function renderFieldBrowserContent(presetType) {
+            const container = document.getElementById('field-browser-content');
+            
+            if (!fieldLibraryData || !fieldLibraryData.presetTypes[presetType]) {
+                container.innerHTML = '<div style="color: rgba(255, 255, 255, 0.4); padding: 20px; text-align: center;">No fields available for this preset type.</div>';
+                return;
+            }
+            
+            const fieldDefs = fieldLibraryData.presetTypes[presetType].fieldDefinitions || [];
+            const existingFieldIds = promptFields.map(f => f.id);
+            
+            container.innerHTML = `
+                <div style="margin-bottom: 16px;">
+                    <div style="color: rgba(255, 255, 255, 0.5); font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px;">Available Fields</div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        ${fieldDefs.map(field => {
+                            const isAdded = existingFieldIds.includes(field.id);
+                            return `
+                                <button onclick="${isAdded ? '' : `addFieldFromBrowser('${field.id}')`}" ${isAdded ? 'disabled' : ''} class="field-browser-chip" data-field-id="${field.id}" data-field-name="${field.name.toLowerCase()}" data-field-description="${(field.description || '').toLowerCase()}" style="
+                                    background: ${isAdded ? 'rgba(255, 255, 255, 0.05)' : 'rgba(40, 200, 120, 0.15)'};
+                                    border: 1px solid ${isAdded ? 'rgba(255, 255, 255, 0.1)' : 'rgba(40, 200, 120, 0.3)'};
+                                    color: ${isAdded ? 'rgba(255, 255, 255, 0.4)' : 'white'};
+                                    padding: 10px 14px;
+                                    border-radius: 6px;
+                                    cursor: ${isAdded ? 'not-allowed' : 'pointer'};
+                                    font-size: 0.9em;
+                                    font-family: Inter, sans-serif;
+                                    transition: all 0.2s;
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: flex-start;
+                                    gap: 4px;
+                                    min-width: 180px;
+                                    opacity: ${isAdded ? '0.5' : '1'};
+                                " ${isAdded ? '' : 'onmouseover="this.style.background=\'rgba(40, 200, 120, 0.25)\'" onmouseout="this.style.background=\'rgba(40, 200, 120, 0.15)\'"'}>
+                                    <div style="display: flex; align-items: center; gap: 6px; width: 100%;">
+                                        <span style="font-weight: 500;">${field.name}</span>
+                                        ${isAdded ? '<span style="font-size: 0.75em; background: rgba(255, 255, 255, 0.1); padding: 2px 6px; border-radius: 3px;">Added</span>' : ''}
+                                    </div>
+                                    ${field.description ? `<span style="font-size: 0.8em; color: rgba(255, 255, 255, 0.5); line-height: 1.3;">${field.description}</span>` : ''}
+                                    <span style="font-size: 0.75em; color: rgba(255, 255, 255, 0.4);">Type: ${field.type}</span>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function addFieldFromBrowser(fieldId) {
+            const presetType = document.getElementById('preset-type').value;
+            const fieldDef = fieldLibraryData.presetTypes[presetType].fieldDefinitions.find(f => f.id === fieldId);
+            
+            if (!fieldDef) {
+                showError('Field not found');
+                return;
+            }
+            
+            // Add to promptFields
+            promptFields.push({
+                id: fieldDef.id,
+                name: fieldDef.name,
+                type: fieldDef.type,
+                value: fieldDef.defaultValue || '',
+                required: fieldDef.required || false
+            });
+            
+            // Update displays
+            renderPromptFieldsList();
+            updatePromptPreview();
+            
+            // Re-render browser to update "Added" badges
+            renderFieldBrowserContent(presetType);
+        }
+        
+        function filterFieldBrowser(query) {
+            const chips = document.querySelectorAll('.field-browser-chip');
+            const lowerQuery = query.toLowerCase();
+            
+            chips.forEach(chip => {
+                const name = chip.getAttribute('data-field-name');
+                const description = chip.getAttribute('data-field-description');
+                const matches = name.includes(lowerQuery) || description.includes(lowerQuery);
+                chip.style.display = matches ? 'flex' : 'none';
+            });
+        }
+        
+        // Close all drawers
+        function closeAllDrawers() {
+            closeFieldBrowser();
+            closeFieldEditor();
+            closePresetEditor();
+            closePresetDrawer();
+        }
+        
+        // ============================================
+        // PRESET RENDERING & CRUD
+        // ============================================
+        
+        function renderPresetList() {
+            const container = document.getElementById('preset-list');
+            if (!allPresets || allPresets.length === 0) {
+                container.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: rgba(255, 255, 255, 0.4);">
+                        <p style="font-size: 1.1em; margin-bottom: 10px;">No presets yet</p>
+                        <p style="font-size: 0.9em;">Click "+ New Preset" to create your first preset</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = allPresets.map((preset, index) => `
+                <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 15px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s;" onclick="openPresetEditor('${preset.id}')">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                        <h3 style="color: white; margin: 0; font-size: 1em;">${preset.name}</h3>
+                        <span style="background: rgba(120, 40, 200, 0.3); color: rgba(200, 150, 255, 0.9); padding: 2px 8px; border-radius: 4px; font-size: 0.75em; text-transform: uppercase;">${preset.presetType}</span>
+                    </div>
+                    <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.85em; margin: 0 0 8px 0;">Output: ${preset.outputFormat}</p>
+                    ${preset.tags && preset.tags.length > 0 ? `
+                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                            ${preset.tags.map(tag => `<span style="background: rgba(40, 200, 120, 0.2); color: rgba(100, 255, 180, 0.8); padding: 2px 6px; border-radius: 4px; font-size: 0.7em;">${tag}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+        
+        function resetPresetForm() {
+            document.getElementById('preset-type').value = 'photorealistic';
+            document.getElementById('preset-name').value = '';
+            document.getElementById('preset-output-format').value = 'text';
+            document.getElementById('format-text-radio').checked = true;
+            document.getElementById('format-json-radio').checked = false;
+            document.getElementById('preset-background-color').value = '';
+            document.getElementById('preset-background-transparent').checked = false;
+            document.getElementById('preset-aspect-ratio').value = '1:1';
+            document.getElementById('preset-tags').value = '';
+            document.getElementById('prompt-fields-list').innerHTML = '<div style="color: rgba(255, 255, 255, 0.4); width: 100%; text-align: center; padding: 20px; font-size: 0.9em;">No fields added yet</div>';
+            document.getElementById('preset-prompt-preview').value = '';
+            currentEditingPresetId = null;
+            changePresetType('photorealistic');
+        }
+        
+        function loadPresetForEditing(presetId) {
+            const preset = allPresets.find(p => p.id === presetId);
+            if (!preset) return;
+            
+            currentEditingPresetId = presetId;
+            document.getElementById('preset-type').value = preset.presetType;
+            document.getElementById('preset-name').value = preset.name;
+            document.getElementById('preset-output-format').value = preset.outputFormat;
+            // Set radio buttons
+            if (preset.outputFormat === 'json') {
+                document.getElementById('format-json-radio').checked = true;
+                document.getElementById('format-text-radio').checked = false;
+            } else {
+                document.getElementById('format-text-radio').checked = true;
+                document.getElementById('format-json-radio').checked = false;
+            }
+            document.getElementById('preset-background-color').value = preset.backgroundColor || '';
+            document.getElementById('preset-background-transparent').checked = preset.backgroundTransparent || false;
+            document.getElementById('preset-aspect-ratio').value = preset.aspectRatio || '1:1';
+            document.getElementById('preset-tags').value = preset.tags ? preset.tags.join(', ') : '';
+            
+            // Load fields
+            promptFields = preset.fields || [];
+            updatePromptFieldsDisplay();
+            updatePromptPreview();
+            changePresetType(preset.presetType);
+        }
+        
+        async function saveCurrentPreset() {
+            const name = document.getElementById('preset-name').value.trim();
+            if (!name) {
+                alert('Please enter a preset name');
+                return;
+            }
+            
+            const presetData = {
+                name: name,
+                presetType: document.getElementById('preset-type').value,
+                outputFormat: document.getElementById('preset-output-format').value,
+                fields: promptFields,
+                backgroundColor: document.getElementById('preset-background-color').value || null,
+                backgroundTransparent: document.getElementById('preset-background-transparent').checked,
+                aspectRatio: document.getElementById('preset-aspect-ratio').value,
+                tags: document.getElementById('preset-tags').value.split(',').map(t => t.trim()).filter(t => t)
+            };
+            
+            try {
+                if (currentEditingPresetId) {
+                    await updatePresetInDB(currentEditingPresetId, presetData);
+                } else {
+                    await savePresetToDB(presetData);
+                }
+                await loadPresetsFromDB();
+                renderPresetList();
+                closePresetEditor();
+                alert('Preset saved successfully!');
+            } catch (error) {
+                console.error('Failed to save preset:', error);
+                alert('Failed to save preset. Please try again.');
+            }
+        }
+        
+        let currentEditingFieldId = null;
+        
+        function loadFieldForEditing(fieldId) {
+            currentEditingFieldId = fieldId;
+            const field = promptFields.find(f => f.id === fieldId);
+            if (!field) return;
+            
+            // Update title
+            document.getElementById('field-editor-title').textContent = `Edit: ${field.name}`;
+            
+            const content = document.getElementById('field-editor-content');
+            content.innerHTML = `
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; color: rgba(255, 255, 255, 0.7); font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 500;">Field Name</label>
+                    <input type="text" value="${field.name}" readonly style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 4px; color: rgba(255, 255, 255, 0.5); font-size: 0.9em; font-family: Inter, sans-serif; cursor: not-allowed;">
+                    <div style="margin-top: 6px; font-size: 0.85em; color: rgba(255, 255, 255, 0.4); line-height: 1.4;">Field name cannot be changed</div>
+                </div>
+                
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; color: rgba(255, 255, 255, 0.7); font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 500;">Field Value</label>
+                    <textarea id="field-edit-value" rows="4" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 4px; color: white; font-size: 0.9em; font-family: Inter, sans-serif; resize: vertical; line-height: 1.5;">${field.value || ''}</textarea>
+                    <div style="margin-top: 6px; font-size: 0.85em; color: rgba(255, 255, 255, 0.4); line-height: 1.4;">Enter the default value or instructions for this field</div>
+                </div>
+                
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; color: rgba(255, 255, 255, 0.7); font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 500;">Field Type</label>
+                    <input type="text" value="${field.type}" readonly style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 4px; color: rgba(255, 255, 255, 0.5); font-size: 0.9em; font-family: Inter, sans-serif; cursor: not-allowed;">
+                </div>
+                
+                <div style="margin-bottom: 24px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;">
+                        <input type="checkbox" id="field-edit-required" ${field.required ? 'checked' : ''} style="width: 18px; height: 18px; cursor: pointer; accent-color: rgb(120, 40, 200);">
+                        <span style="color: rgba(255, 255, 255, 0.9); font-size: 0.9em; font-weight: 500;">Required field</span>
+                    </label>
+                    <div style="margin-top: 6px; margin-left: 26px; font-size: 0.85em; color: rgba(255, 255, 255, 0.4); line-height: 1.4;">Mark as required if this field must be filled</div>
+                </div>
+            `;
+        }
+        
+        function saveFieldEdit() {
+            if (!currentEditingFieldId) return;
+            
+            const field = promptFields.find(f => f.id === currentEditingFieldId);
+            if (!field) return;
+            
+            // Update field values
+            field.value = document.getElementById('field-edit-value').value;
+            field.required = document.getElementById('field-edit-required').checked;
+            
+            // Update displays
+            renderPromptFieldsList();
+            updatePromptPreview();
+            
+            closeFieldEditor();
+            showSuccess('Field updated successfully');
+        }
+        
+        function deleteCurrentField() {
+            if (!currentEditingFieldId) return;
+            
+            const field = promptFields.find(f => f.id === currentEditingFieldId);
+            if (!field) return;
+            
+            if (!confirm(`Delete field "${field.name}"?`)) return;
+            
+            // Remove from array
+            promptFields = promptFields.filter(f => f.id !== currentEditingFieldId);
+            
+            // Update displays
+            renderPromptFieldsList();
+            updatePromptPreview();
+            
+            closeFieldEditor();
+            showSuccess('Field deleted successfully');
+        }
+        
+        function switchMode(mode) {
+            currentMode = mode;
+            iterationCount = 0;
+            
+            // Update tabs
+            document.querySelectorAll('.mode-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update forms
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelector('.form-section.' + mode).classList.add('active');
+            
+            // Clear results
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('loading').classList.remove('active');
+        }
+        
+        function handleImageUpload(mode, input) {
+            const files = Array.from(input.files);
+            // Map short mode names to full mode names
+            const modeMap = {
+                'edit': 'image-edit',
+                'compose': 'multi-image-compose',
+                'generate': 'text-to-image'
+            };
+            const uploadKey = modeMap[mode] || mode;
+            
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedImages[uploadKey].push(e.target.result);
+                    uploadedFileNames[uploadKey].push(file.name);
+                    uploadedFileSizes[uploadKey].push(file.size);
+                    renderUploadedImages(mode);
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            input.value = '';
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 10) / 10 + ' ' + sizes[i];
+        }
+        
+        function renderUploadedImages(mode) {
+            // Map short mode names to full mode names
+            const modeMap = {
+                'edit': 'image-edit',
+                'compose': 'multi-image-compose',
+                'generate': 'text-to-image'
+            };
+            const key = modeMap[mode] || mode;
+            const container = document.getElementById(mode + '-uploaded');
+            const countContainer = document.getElementById(mode + '-count');
+            const images = uploadedImages[key];
+            const names = uploadedFileNames[key];
+            const sizes = uploadedFileSizes[key];
+            
+            // Show count badge
+            if (images.length > 0) {
+                countContainer.textContent = `✓ ${images.length} image${images.length !== 1 ? 's' : ''} ready`;
+                countContainer.classList.add('active');
+            } else {
+                countContainer.classList.remove('active');
+            }
+            
+            container.innerHTML = images.map((img, idx) => `
+                <div class="uploaded-image">
+                    <div class="uploaded-image-content">
+                        <img src="${img}" alt="uploaded">
+                        <div class="uploaded-image-name" title="${names[idx]}">${names[idx]}</div>
+                        <div class="uploaded-image-size">${formatFileSize(sizes[idx])}</div>
+                    </div>
+                    <button class="remove" onclick="removeImage('${mode}', ${idx})">×</button>
+                </div>
+            `).join('');
+        }
+        
+        function removeImage(mode, idx) {
+            // Map short mode names to full mode names
+            const modeMap = {
+                'edit': 'image-edit',
+                'compose': 'multi-image-compose',
+                'generate': 'text-to-image'
+            };
+            const key = modeMap[mode] || mode;
+            uploadedImages[key].splice(idx, 1);
+            uploadedFileNames[key].splice(idx, 1);
+            uploadedFileSizes[key].splice(idx, 1);
+            renderUploadedImages(mode);
+        }
+        
+        async function generateImage(mode) {
+            // Map mode names to their form element suffixes
+            const modeSuffix = mode === 'text-to-image' ? 'generate' : (mode === 'multi-image-compose' ? 'compose' : 'edit');
+            const prompt = document.getElementById('prompt-' + modeSuffix).value;
+            const aspectRatio = document.getElementById('aspect-ratio' + (mode === 'text-to-image' ? '' : '-' + modeSuffix)).value;
+            const images = uploadedImages[mode === 'text-to-image' ? 'text-to-image' : mode] || [];
+            
+            if (!prompt.trim()) {
+                showError('Please enter a prompt');
+                return;
+            }
+            
+            if ((mode === 'image-edit' || mode === 'multi-image-compose') && images.length === 0) {
+                showError('Please upload at least one image');
+                return;
+            }
+            
+            if (mode === 'multi-image-compose' && images.length < 2) {
+                showError('Please upload at least 2 images for composition');
+                return;
+            }
+            
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('error').classList.remove('active');
+            document.getElementById('results').classList.remove('active');
+            iterationCount = 0;
+            
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prompt: prompt,
+                        aspect_ratio: aspectRatio,
+                        mode: mode,
+                        uploaded_images: images,
+                        session_id: currentSessionId
+                    })
+                });
+                
+                const data = await response.json();
+                document.getElementById('loading').classList.remove('active');
+                
+                if (!response.ok) {
+                    showError(data.error || 'An error occurred');
+                    return;
+                }
+                
+                if (data.success && data.image_base64) {
+                    currentImageId = data.image_id;
+                    currentSessionId = data.session_id;
+                    iterationCount++;
+                    
+                    const imageElement = document.getElementById('generated-image');
+                    imageElement.src = `data:${data.mime_type};base64,${data.image_base64}`;
+                    
+                    if (data.text) {
+                        document.getElementById('response-text').textContent = data.text;
+                    }
+                    
+                    document.getElementById('iteration-counter').textContent = `Iteration: ${iterationCount}`;
+                    document.getElementById('results').classList.add('active');
+                    
+                    // Clear uploaded images after generation
+                    uploadedImages[mode] = [];
+                    uploadedFileNames[mode] = [];
+                    uploadedFileSizes[mode] = [];
+                    
+                    // Determine the short mode name for rendering
+                    const shortMode = mode === 'image-edit' ? 'edit' : (mode === 'multi-image-compose' ? 'compose' : 'generate');
+                    renderUploadedImages(shortMode);
+                } else {
+                    showError(data.error || 'Image generation failed');
+                }
+            } catch (error) {
+                document.getElementById('loading').classList.remove('active');
+                showError(error.message);
+            }
+        }
+        
+        async function refineImage() {
+            const refinePrompt = document.getElementById('refine-prompt').value;
+            if (!refinePrompt.trim()) {
+                showError('Please enter refinement instructions');
+                return;
+            }
+            
+            if (!currentImageId) {
+                showError('No image to refine');
+                return;
+            }
+            
+            document.getElementById('refine-prompt').value = '';
+            await generateImage(currentMode);
+            document.getElementById('refine-prompt').focus();
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('active');
+        }
+        
+        function showSuccess(message) {
+            // Create temporary success notification
+            const successDiv = document.createElement('div');
+            successDiv.textContent = message;
+            successDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(40, 200, 120, 0.95);
+                color: white;
+                padding: 12px 20px;
+                border-radius: 4px;
+                font-family: Inter, sans-serif;
+                font-size: 0.9em;
+                font-weight: 500;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                z-index: 10000;
+                animation: slideInRight 0.3s ease;
+            `;
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                successDiv.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => successDiv.remove(), 300);
+            }, 2500);
+        }
+        
+        function clearForm(mode) {
+            const promptId = mode === 'text-to-image' ? 'prompt-generate' : 'prompt-' + mode.split('-')[1];
+            document.getElementById(promptId).value = '';
+            uploadedImages[mode] = [];
+            uploadedFileNames[mode] = [];
+            uploadedFileSizes[mode] = [];
+            
+            // Determine the short mode name for rendering
+            const shortMode = mode === 'image-edit' ? 'edit' : (mode === 'multi-image-compose' ? 'compose' : 'generate');
+            renderUploadedImages(shortMode);
+            
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('error').classList.remove('active');
+            currentImageId = null;
+            iterationCount = 0;
+        }
+        
+        function downloadImage() {
+            if (!currentImageId) {
+                showError('No image to download');
+                return;
+            }
+            const link = document.createElement('a');
+            link.href = `/api/download/${currentImageId}`;
+            link.click();
+        }
+        
+        // Drag and drop support
+        ['text-to-image', 'image-edit', 'multi-image-compose'].forEach(mode => {
+            const uploadAreaId = mode === 'image-edit' ? 'edit-upload-area' : (mode === 'multi-image-compose' ? 'compose-upload-area' : 'style-upload-area');
+            const inputId = mode === 'image-edit' ? 'edit-image-input' : (mode === 'multi-image-compose' ? 'compose-image-input' : 'style-image-input');
+            
+            const uploadArea = document.getElementById(uploadAreaId);
+            const input = document.getElementById(inputId);
+            
+            if (uploadArea && input) {
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.add('dragging');
+                });
+                
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.classList.remove('dragging');
+                });
+                
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.remove('dragging');
+                    input.files = e.dataTransfer.files;
+                    handleImageUpload(mode === 'text-to-image' ? 'generate' : mode, input);
+                });
+            }
+        });
+        
+        // Style Preset Management
+        let currentEditingPresetIndex = -1;
+        let currentEditingPresetId = null;
+        let presetImageData = null;
+        
+        function loadPresetList() {
+            const select = document.getElementById('style-preset');
+            if (!select) return;
+            
+            const currentValue = select.value;
+            
+            // Clear existing options except the first one
+            while (select.options.length > 1) {
+                select.remove(1);
+            }
+            
+            // Add presets from database
+            allPresets.forEach((preset, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = preset.name;
+                select.appendChild(option);
+            });
+            
+            // Restore selection if still valid
+            if (currentValue && select.querySelector(`option[value="${currentValue}"]`)) {
+                select.value = currentValue;
+            }
+        }
+        
+        function applyStylePreset() {
+            const select = document.getElementById('style-preset');
+            const index = select.value;
+            
+            if (index === '') {
+                return;
+            }
+            
+            const preset = allPresets[index];
+            if (!preset) return;
+            
+            if (!preset.promptFields || preset.promptFields.length === 0) {
+                applyFilledPreset(preset.prompt, preset);
+                return;
+            }
+            
+            // Create dynamic form based on field types and options
+            const formFields = preset.promptFields.map(field => {
+                const fieldName = field.name || field.label;
+                const label = fieldName.replace(/_/g, ' ');
+                
+                let inputHtml = '';
+                if (field.type === 'select' && field.options && field.options.length > 0) {
+                    inputHtml = `
+                        <select name="${fieldName}" required style="width: 100%; padding: 10px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; background: rgba(0, 0, 0, 0.3); color: white; font-size: 0.95em;">
+                            ${field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                            <option value="__custom__">✏️ Custom...</option>
+                        </select>
+                        <input type="text" name="${fieldName}_custom" style="width: 100%; padding: 10px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; background: rgba(0, 0, 0, 0.3); color: white; font-size: 0.95em; margin-top: 5px; display: none;" placeholder="Enter custom value...">
+                    `;
+                } else if (field.type === 'textarea') {
+                    inputHtml = `<textarea name="${fieldName}" required style="width: 100%; min-height: 80px; padding: 10px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; background: rgba(0, 0, 0, 0.3); color: white; font-size: 0.95em; resize: vertical;" placeholder="Enter ${label}..."></textarea>`;
+                } else {
+                    inputHtml = `<input type="${field.type === 'number' ? 'number' : 'text'}" name="${fieldName}" required style="width: 100%; padding: 10px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; background: rgba(0, 0, 0, 0.3); color: white; font-size: 0.95em;" placeholder="Enter ${label}...">`;
+                }
+                
+                return `
+                    <div>
+                        <label style="display: block; margin-bottom: 5px; color: rgba(255, 255, 255, 0.8); font-size: 0.9em; text-transform: capitalize;">${label}</label>
+                        ${inputHtml}
+                    </div>
+                `;
+            }).join('');
+            
+            const modalHtml = `
+                <div id="placeholder-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(5px);">
+                    <div style="background: linear-gradient(135deg, rgba(20, 20, 35, 0.95), rgba(30, 20, 50, 0.95)); padding: 30px; border-radius: 20px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; border: 1px solid rgba(120, 40, 200, 0.3); box-shadow: 0 20px 60px rgba(120, 40, 200, 0.4);">
+                        <h3 style="margin: 0 0 20px 0; color: rgba(255, 255, 255, 0.95); font-size: 1.3em;">Fill Preset Values</h3>
+                        <form id="placeholder-form" style="display: flex; flex-direction: column; gap: 15px;">
+                            ${formFields}
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <button type="submit" style="flex: 1; padding: 12px; background: linear-gradient(135deg, rgba(120, 40, 200, 0.8), rgba(80, 40, 200, 0.8)); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">Apply</button>
+                                <button type="button" onclick="document.getElementById('placeholder-modal').remove()" style="flex: 1; padding: 12px; background: rgba(255, 255, 255, 0.1); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            
+            // Handle custom option for selects
+            document.querySelectorAll('#placeholder-modal select').forEach(select => {
+                select.addEventListener('change', function() {
+                    const customInput = this.parentElement.querySelector('input[type="text"]');
+                    if (this.value === '__custom__') {
+                        customInput.style.display = 'block';
+                        customInput.required = true;
+                    } else {
+                        customInput.style.display = 'none';
+                        customInput.required = false;
+                    }
+                });
+            });
+            
+            document.getElementById('placeholder-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                
+                // Build final prompt
+                let finalPrompt = preset.prompt;
+                let values = {};
+                
+                preset.promptFields.forEach(field => {
+                    const fieldName = field.name || field.label;
+                    let value = formData.get(fieldName);
+                    
+                    // Handle custom select values
+                    if (value === '__custom__') {
+                        value = formData.get(fieldName + '_custom');
+                    }
+                    
+                    values[fieldName] = value;
+                });
+                
+                // Replace placeholders based on output format
+                if (preset.outputFormat === 'json') {
+                    const jsonObj = JSON.parse(preset.prompt);
+                    Object.keys(jsonObj).forEach(key => {
+                        if (values[key]) {
+                            jsonObj[key] = values[key];
+                        }
+                    });
+                    finalPrompt = JSON.stringify(jsonObj);
+                } else {
+                    Object.keys(values).forEach(key => {
+                        finalPrompt = finalPrompt.replace(new RegExp(`{${key}}`, 'g'), values[key]);
+                    });
+                }
+                
+                // Apply the filled template
+                applyFilledPreset(finalPrompt, preset);
+                
+                // Close modal
+                document.getElementById('placeholder-modal').remove();
+            });
+        }
+        
+        function applyFilledPreset(prompt, preset) {
+            // Add background instruction if specified
+            let finalPrompt = prompt;
+            if (preset.backgroundColor) {
+                if (preset.backgroundColor === 'transparent') {
+                    finalPrompt += ' With transparent background.';
+                } else if (preset.backgroundColor !== 'auto') {
+                    finalPrompt += ` With background color: ${preset.backgroundColor}.`;
+                }
+            }
+            
+            // Apply the prompt
+            document.getElementById('prompt-generate').value = finalPrompt;
+            
+            // Apply reference image if exists
+            uploadedImages['text-to-image'] = [];
+            uploadedFileNames['text-to-image'] = [];
+            uploadedFileSizes['text-to-image'] = [];
+            
+            if (preset.referenceImage) {
+                uploadedImages['text-to-image'] = [preset.referenceImage];
+                uploadedFileNames['text-to-image'] = [preset.imageName || 'style-reference.png'];
+                uploadedFileSizes['text-to-image'] = [0];
+                renderUploadedImages('generate');
+            }
+            
+            // Apply aspect ratio
+            if (preset.aspectRatio) {
+                document.getElementById('aspect-ratio').value = preset.aspectRatio;
+            }
+        }
+
+        // ==================== NEW FIELD LIBRARY & PRESET SYSTEM ====================
+        
+        let fieldLibraryData = null;  // Loaded from server
+        let currentPresetType = 'photorealistic';  // Default
+        let promptFields = [];  // Fields added to current preset
+        let allPresets = [];  // All saved presets
+        
+        // Load field library from server
+        async function loadFieldLibrary() {
+            try {
+                const response = await fetch('/api/field-library');
+                fieldLibraryData = await response.json();
+                console.log('Field library loaded:', fieldLibraryData);
+            } catch (error) {
+                console.error('Failed to load field library:', error);
+                showError('Failed to load field library');
+            }
+        }
+        
+        // Load all presets from database
+        async function loadPresetsFromDB() {
+            try {
+                const response = await fetch('/api/presets');
+                allPresets = await response.json();
+                loadPresetList();
+            } catch (error) {
+                console.error('Failed to load presets:', error);
+            }
+        }
+        
+        // Save preset to database
+        async function savePresetToDB(preset) {
+            try {
+                const response = await fetch('/api/presets', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(preset)
+                });
+                const savedPreset = await response.json();
+                allPresets.push(savedPreset);
+                loadPresetList();
+                return savedPreset;
+            } catch (error) {
+                console.error('Failed to save preset:', error);
+                showError('Failed to save preset');
+            }
+        }
+        
+        // Update preset in database
+        async function updatePresetInDB(presetId, preset) {
+            try {
+                const response = await fetch(`/api/presets/${presetId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(preset)
+                });
+                const updatedPreset = await response.json();
+                const idx = allPresets.findIndex(p => p.id === presetId);
+                if (idx >= 0) allPresets[idx] = updatedPreset;
+                loadPresetList();
+                return updatedPreset;
+            } catch (error) {
+                console.error('Failed to update preset:', error);
+                showError('Failed to update preset');
+            }
+        }
+        
+        // Delete preset from database
+        async function deletePresetFromDB(presetId) {
+            try {
+                await fetch(`/api/presets/${presetId}`, { method: 'DELETE' });
+                allPresets = allPresets.filter(p => p.id !== presetId);
+                loadPresetList();
+            } catch (error) {
+                console.error('Failed to delete preset:', error);
+                showError('Failed to delete preset');
+            }
+        }
+        
+        function showFieldLibrary() {
+            if (!fieldLibraryData) {
+                showError('Field library not loaded yet');
+                return;
+            }
+            
+            const presetType = fieldLibraryData.presetTypes[currentPresetType];
+            if (!presetType) return;
+            
+            const fields = Object.entries(presetType.fieldDefinitions);
+            
+            const modalHtml = `
+                <div id="field-library-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(5px);">
+                    <div style="background: linear-gradient(135deg, rgba(20, 20, 35, 0.95), rgba(30, 20, 50, 0.95)); padding: 30px; border-radius: 20px; max-width: 700px; width: 90%; max-height: 80vh; overflow-y: auto; border: 1px solid rgba(120, 40, 200, 0.3); box-shadow: 0 20px 60px rgba(120, 40, 200, 0.4);">
+                        <h3 style="margin: 0 0 10px 0; color: rgba(255, 255, 255, 0.95); font-size: 1.4em;">Field Library</h3>
+                        <p style="margin: 0 0 20px 0; color: rgba(255, 255, 255, 0.6); font-size: 0.9em;">${presetType.name} - ${presetType.description}</p>
+                        <div id="field-library-list" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                            ${fields.map(([fieldName, field]) => `
+                                <div style="display: flex; align-items: center; gap: 10px; padding: 12px; background: rgba(120, 40, 200, 0.15); border: 1px solid rgba(120, 40, 200, 0.3); border-radius: 8px;">
+                                    <div style="flex: 1;">
+                                        <div style="color: white; font-weight: 600; margin-bottom: 4px;">${field.label || fieldName}</div>
+                                        <div style="color: rgba(255, 255, 255, 0.6); font-size: 0.85em;">
+                                            ${field.type} 
+                                            ${field.options ? `(${field.options.length} options)` : ''}
+                                            ${field.required ? '<span style="color: rgba(255, 100, 100, 0.8);">*</span>' : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button type="button" onclick="document.getElementById('field-library-modal').remove()" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.1); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">Close</button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+        
+        function addFieldToPrompt() {
+            if (!fieldLibraryData) {
+                showError('Field library not loaded yet');
+                return;
+            }
+            
+            const presetType = fieldLibraryData.presetTypes[currentPresetType];
+            if (!presetType) return;
+            
+            const fields = Object.entries(presetType.fieldDefinitions);
+            
+            if (fields.length === 0) {
+                showError('No fields available for this preset type');
+                return;
+            }
+            
+            const modalHtml = `
+                <div id="add-field-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(5px);">
+                    <div style="background: linear-gradient(135deg, rgba(20, 20, 35, 0.95), rgba(30, 20, 50, 0.95)); padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; border: 1px solid rgba(120, 40, 200, 0.3); box-shadow: 0 20px 60px rgba(120, 40, 200, 0.4);">
+                        <h3 style="margin: 0 0 20px 0; color: rgba(255, 255, 255, 0.95); font-size: 1.3em;">Add Field to Prompt</h3>
+                        <select id="field-selector" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: white; font-size: 0.95em; margin-bottom: 20px;">
+                            ${fields.map(([fieldName, field]) => `<option value="${fieldName}">${field.label || fieldName} (${field.type})</option>`).join('')}
+                        </select>
+                        <div style="display: flex; gap: 10px;">
+                            <button type="button" onclick="confirmAddField()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, rgba(120, 40, 200, 0.8), rgba(80, 40, 200, 0.8)); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">Add</button>
+                            <button type="button" onclick="document.getElementById('add-field-modal').remove()" style="flex: 1; padding: 12px; background: rgba(255, 255, 255, 0.1); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+        
+        function confirmAddField() {
+            const fieldName = document.getElementById('field-selector').value;
+            const presetType = fieldLibraryData.presetTypes[currentPresetType];
+            const fieldDef = presetType.fieldDefinitions[fieldName];
+            
+            const fieldId = `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            promptFields.push({
+                id: fieldId,
+                name: fieldName,
+                label: fieldDef.label || fieldName,
+                type: fieldDef.type,
+                options: fieldDef.options || fieldDef.suggestions || [],
+                allowCustom: fieldDef.allowCustom,
+                required: fieldDef.required
+            });
+            
+            document.getElementById('add-field-modal').remove();
+            renderPromptFieldsList();
+            updatePromptPreview();
+        }
+        
+        function renderPromptFieldsList() {
+            const container = document.getElementById('prompt-fields-list');
+            if (promptFields.length === 0) {
+                container.innerHTML = '<div style="color: rgba(255, 255, 255, 0.4); width: 100%; text-align: center; padding: 20px; font-size: 0.9em;">No fields added yet. Click "+ Add to Prompt" to start building.</div>';
+                return;
+            }
+            
+            container.innerHTML = promptFields.map(field => `
+                <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(40, 200, 120, 0.15); padding: 10px 14px; border-radius: 6px; border: 1px solid rgba(40, 200, 120, 0.3);">
+                    <div style="display: flex; flex-direction: column; gap: 2px; flex: 1;">
+                        <span style="color: white; font-size: 0.9em; font-weight: 500;">{${field.name}}</span>
+                        <span style="color: rgba(255, 255, 255, 0.4); font-size: 0.75em;">Type: ${field.type}${field.required ? ' • Required' : ''}</span>
+                    </div>
+                    <button type="button" onclick="openFieldEditor('${field.id}')" aria-label="Edit field" style="padding: 6px; background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.7); border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; transition: all 0.2s; min-width: 28px; min-height: 28px; justify-content: center;" onmouseover="this.style.background='rgba(255, 255, 255, 0.15)'; this.style.color='white'" onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.color='rgba(255, 255, 255, 0.7)'">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 1l3 3L5 12H2v-3L10 1z"/></svg>
+                    </button>
+                    <button type="button" onclick="removePromptField('${field.id}')" aria-label="Remove field" style="padding: 6px; background: rgba(200, 40, 80, 0.15); color: rgb(200, 40, 80); border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; transition: all 0.2s; min-width: 28px; min-height: 28px; justify-content: center;" onmouseover="this.style.background='rgba(200, 40, 80, 0.25)'" onmouseout="this.style.background='rgba(200, 40, 80, 0.15)'">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 4L4 10M4 4l6 6"/></svg>
+                    </button>
+                </div>
+            `).join('');
+        }
+        
+        function removePromptField(fieldId) {
+            promptFields = promptFields.filter(f => f.id !== fieldId);
+            renderPromptFieldsList();
+            updatePromptPreview();
+        }
+        
+        function setOutputFormat(format) {
+            // Update radio button state (if called programmatically)
+            if (format === 'text') {
+                document.getElementById('format-text-radio').checked = true;
+            } else {
+                document.getElementById('format-json-radio').checked = true;
+            }
+            // Store in hidden input for compatibility with existing code
+            document.getElementById('preset-output-format').value = format;
+            // Update preview
+            updatePromptPreview();
+        }
+        
+        function updatePromptPreview() {
+            const preview = document.getElementById('preset-prompt-preview');
+            const format = document.getElementById('preset-output-format').value;
+            
+            if (promptFields.length === 0) {
+                preview.value = '';
+                return;
+            }
+            
+            if (format === 'json') {
+                const jsonObj = {};
+                promptFields.forEach(f => {
+                    jsonObj[f.name] = `{${f.name}}`;
+                });
+                preview.value = JSON.stringify(jsonObj, null, 2);
+            } else {
+                preview.value = promptFields.map(f => `{${f.name}}`).join(' ');
+            }
+        }
+        
+        function createNewLibraryField() {
+            // Will implement field creation modal
+            showError('Field creation coming soon - for now, fields are predefined');
+        }
+        
+        function editLibraryField(idx) {
+            showError('Field editing coming soon');
+        }
+        
+        function deleteLibraryField(idx) {
+            if (!confirm('Delete this field from library?')) return;
+            fieldLibrary.splice(idx, 1);
+            document.getElementById('field-library-modal').remove();
+            showFieldLibrary();
+        }
+        
+        function getPromptTemplateFromFields() {
+            const format = document.getElementById('preset-output-format').value;
+            if (format === 'json') {
+                const jsonObj = {};
+                promptFields.forEach(f => {
+                    jsonObj[f.name] = `{${f.name}}`;
+                });
+                return JSON.stringify(jsonObj);
+            } else {
+                return promptFields.map(f => `{${f.name}}`).join(' ');
+            }
+        }
+        
+        // DEPRECATED: saveStylePreset() removed - drawer system uses openPresetEditor(null)
+        
+        function handlePresetImageUpload() {
+            const input = document.getElementById('preset-image-input');
+            const file = input.files[0];
+            
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                presetImageData = {
+                    data: e.target.result,
+                    name: file.name,
+                    size: file.size
+                };
+                
+                // Show preview
+                document.getElementById('preset-image-preview').innerHTML = `
+                    <div style="position: relative; display: inline-block; border-radius: 8px; overflow: hidden; border: 2px solid rgba(40, 200, 120, 0.5);">
+                        <img src="${e.target.result}" style="max-width: 200px; max-height: 200px; display: block;">
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0, 0, 0, 0.9); color: white; padding: 5px; font-size: 0.75em;">
+                            ${file.name}
+                        </div>
+                    </div>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function savePresetFromModal() {
+            const name = document.getElementById('preset-name').value.trim();
+            const promptTemplate = getPromptTemplateFromFields();
+            const outputFormat = document.getElementById('preset-output-format').value;
+            
+            if (!name) {
+                showError('Preset name is required');
+                return;
+            }
+            
+            if (promptFields.length === 0) {
+                showError('Add at least one field to the prompt');
+                return;
+            }
+            
+            // Get background settings
+            const bgColor = document.getElementById('preset-background-color').value.trim();
+            const bgTransparent = document.getElementById('preset-background-transparent').checked;
+            
+            const preset = {
+                name: name,
+                prompt: promptTemplate,
+                outputFormat: outputFormat,
+                promptFields: promptFields.map(f => ({
+                    id: f.id,
+                    name: f.name,
+                    type: f.type,
+                    options: f.options
+                })),
+                backgroundColor: bgTransparent ? 'transparent' : (bgColor || 'auto'),
+                aspectRatio: document.getElementById('preset-aspect-ratio').value,
+                tags: document.getElementById('preset-tags').value.split(',').map(t => t.trim()).filter(t => t),
+                referenceImage: presetImageData ? presetImageData.data : null,
+                imageName: presetImageData ? presetImageData.name : null,
+                createdAt: new Date().toISOString()
+            };
+            
+            if (currentEditingPresetIndex >= 0) {
+                // Update existing
+                stylePresets[currentEditingPresetIndex] = preset;
+            } else {
+                // Create new
+                stylePresets.push(preset);
+            }
+            
+            localStorage.setItem('stylePresets', JSON.stringify(stylePresets));
+            loadPresetList();
+            closePresetEditModal();
+            
+            // If managing presets, refresh the list
+            if (document.getElementById('preset-modal').style.display === 'flex') {
+                renderPresetList();
+            }
+        }
+        
+        function managePresets() {
+            openPresetDrawer();
+        }
+        
+        function changePresetType(type) {
+            currentPresetType = type;
+            promptFields = [];  // Clear current fields
+            renderPromptFieldsList();
+            updatePromptPreview();
+            
+            // Update description
+            if (fieldLibraryData && fieldLibraryData.presetTypes[type]) {
+                const desc = document.getElementById('preset-type-description');
+                if (desc) {
+                    desc.textContent = fieldLibraryData.presetTypes[type].description;
+                }
+            }
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadFieldLibrary();
+            await loadPresetsFromDB();
+            
+            // Handle background transparent checkbox
+            const bgTransparentCheckbox = document.getElementById('preset-background-transparent');
+            const bgColorInput = document.getElementById('preset-background-color');
+            
+            if (bgTransparentCheckbox && bgColorInput) {
+                bgTransparentCheckbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        bgColorInput.value = '';
+                        bgColorInput.disabled = true;
+                        bgColorInput.style.opacity = '0.5';
+                    } else {
+                        bgColorInput.disabled = false;
+                        bgColorInput.style.opacity = '1';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
