@@ -2,6 +2,8 @@
 
 **Repository URL**: https://github.com/antonpme/nano-banana-studio
 
+> **Note:** The repository is named `nano-banana-studio` (the application) to distinguish it from `nano-banana` (the Gemini 2.5 Flash image model it uses).
+
 ---
 
 ## ✅ What's Been Completed
