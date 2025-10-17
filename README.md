@@ -46,8 +46,8 @@ Transform text into stunning images with an intuitive, feature-rich interface. C
 
 **1. Clone the repository**
 ```bash
-git clone https://github.com/antonpme/nano-banana.git
-cd nano-banana
+git clone https://github.com/antonpme/nano-banana-studio.git
+cd nano-banana-studio
 ```
 
 **2. Create virtual environment**
@@ -247,7 +247,7 @@ See [docs/tasks.md](./docs/tasks.md) for detailed progress.
 - Preset list search/filter not yet implemented
 - No preset duplication feature yet
 
-See [GitHub Issues](https://github.com/antonpme/nano-banana/issues) for full list.
+See [GitHub Issues](https://github.com/antonpme/nano-banana-studio/issues) for full list.
 
 ---
 
@@ -268,8 +268,8 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/antonpme/nano-banana/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/antonpme/nano-banana/discussions)
+- **Issues**: [GitHub Issues](https://github.com/antonpme/nano-banana-studio/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/antonpme/nano-banana-studio/discussions)
 
 ---
 

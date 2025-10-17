@@ -58,7 +58,7 @@ gh repo edit --description "A professional, self-hosted control panel for Google
    ```
 
 4. **Update README.md** with your actual GitHub username:
-   - Replace `For help, visit: https://github.com/antonpme/nano-banana` with your actual URL
+   - Replace `For help, visit: https://github.com/antonpme/nano-banana-studio` with your actual URL
    - Replace `yourusername` in all badge URLs
 
 ### What's Already in Your Repo

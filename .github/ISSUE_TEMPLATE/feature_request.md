@@ -21,6 +21,9 @@ Describe any alternative solutions or features you've considered.
 ## Use Case Example
 Provide a concrete example of how you would use this feature.
 
+**Example Scenario:**
+"As a content creator, I want to batch-generate 10 variations of the same prompt so that I can choose the best one for my Instagram post."
+
 ## Priority
 How important is this feature to you?
 - [ ] Critical - blocks my workflow

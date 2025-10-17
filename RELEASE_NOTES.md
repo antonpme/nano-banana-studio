@@ -2,7 +2,7 @@
 
 **The first open-source release of Nano-Banana Studio!**
 
-A professional, self-hosted control panel for Google's Gemini 2.5 Flash image generation model. Create stunning images with an intuitive interface, reusable presets, and field-based prompt templates.
+A professional, self-hosted control panel for Google's Gemini 2.5 Flash image generation model (nano-banana). Create stunning images with an intuitive interface, reusable presets, and field-based prompt templates.
 
 ---
 
@@ -26,8 +26,8 @@ A professional, self-hosted control panel for Google's Gemini 2.5 Flash image ge
 
 ### Quick Start (Docker)
 ```bash
-git clone https://github.com/antonpme/nano-banana.git
-cd nano-banana
+git clone https://github.com/antonpme/nano-banana-studio.git
+cd nano-banana-studio
 echo "GEMINI_API_KEY=your-key-here" > .env
 docker-compose up -d
 ```
@@ -35,8 +35,8 @@ docker-compose up -d
 ### Manual Installation
 ```bash
 # Clone repository
-git clone https://github.com/antonpme/nano-banana.git
-cd nano-banana
+git clone https://github.com/antonpme/nano-banana-studio.git
+cd nano-banana-studio
 
 # Use automated installation script
 # On Windows:
@@ -82,7 +82,7 @@ chmod +x install.sh
 - Preset list search/filter not yet implemented
 - No preset duplication feature
 
-See [Issue #1](https://github.com/antonpme/nano-banana/issues/1) for the complete roadmap.
+See [Issue #1](https://github.com/antonpme/nano-banana-studio/issues/1) for the complete roadmap.
 
 ---
 
@@ -125,9 +125,9 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ## 🔗 Links
 
-- **Repository**: https://github.com/antonpme/nano-banana
-- **Issues**: https://github.com/antonpme/nano-banana/issues
-- **Discussions**: https://github.com/antonpme/nano-banana/discussions
+- **Repository**: https://github.com/antonpme/nano-banana-studio
+- **Issues**: https://github.com/antonpme/nano-banana-studio/issues
+- **Discussions**: https://github.com/antonpme/nano-banana-studio/discussions
 
 ---
 

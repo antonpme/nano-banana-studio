@@ -1,13 +1,13 @@
 # 🎉 Nano-Banana Studio - Successfully Published on GitHub!
 
-**Repository URL**: https://github.com/antonpme/nano-banana
+**Repository URL**: https://github.com/antonpme/nano-banana-studio
 
 ---
 
 ## ✅ What's Been Completed
 
 ### Repository Setup
-- ✅ GitHub repository created: `antonpme/nano-banana`
+- ✅ GitHub repository created: `antonpme/nano-banana-studio`
 - ✅ Public visibility for open-source community
 - ✅ All code and documentation pushed (6,593+ lines)
 - ✅ Git history preserved (4 commits on main branch)
@@ -51,22 +51,22 @@
 ## 🔗 Important Links
 
 ### Main Repository
-- **Home**: https://github.com/antonpme/nano-banana
-- **Code**: https://github.com/antonpme/nano-banana/tree/main
-- **Releases**: https://github.com/antonpme/nano-banana/releases
-- **Issues**: https://github.com/antonpme/nano-banana/issues
-- **Discussions**: https://github.com/antonpme/nano-banana/discussions (enable this!)
+- **Home**: https://github.com/antonpme/nano-banana-studio
+- **Code**: https://github.com/antonpme/nano-banana-studio/tree/main
+- **Releases**: https://github.com/antonpme/nano-banana-studio/releases
+- **Issues**: https://github.com/antonpme/nano-banana-studio/issues
+- **Discussions**: https://github.com/antonpme/nano-banana-studio/discussions (enable this!)
 
 ### Documentation
-- **README**: https://github.com/antonpme/nano-banana#readme
-- **Contributing**: https://github.com/antonpme/nano-banana/blob/main/CONTRIBUTING.md
-- **License**: https://github.com/antonpme/nano-banana/blob/main/LICENSE
-- **Product Docs**: https://github.com/antonpme/nano-banana/tree/main/docs
+- **README**: https://github.com/antonpme/nano-banana-studio#readme
+- **Contributing**: https://github.com/antonpme/nano-banana-studio/blob/main/CONTRIBUTING.md
+- **License**: https://github.com/antonpme/nano-banana-studio/blob/main/LICENSE
+- **Product Docs**: https://github.com/antonpme/nano-banana-studio/tree/main/docs
 
 ### Installation
-- **Quick Start**: https://github.com/antonpme/nano-banana#-quick-start
-- **Docker**: https://github.com/antonpme/nano-banana#-docker-deployment
-- **Manual Setup**: https://github.com/antonpme/nano-banana/blob/main/GITHUB_SETUP.md
+- **Quick Start**: https://github.com/antonpme/nano-banana-studio#-quick-start
+- **Docker**: https://github.com/antonpme/nano-banana-studio#-docker-deployment
+- **Manual Setup**: https://github.com/antonpme/nano-banana-studio/blob/main/GITHUB_SETUP.md
 
 ---
 
@@ -125,7 +125,7 @@ Once everything is polished:
 
 ## 🐛 Known Limitations (Address Before v1.0)
 
-These are tracked in [Issue #1](https://github.com/antonpme/nano-banana/issues/1):
+These are tracked in [Issue #1](https://github.com/antonpme/nano-banana-studio/issues/1):
 
 ### High Priority
 - **No Settings UI** - API key must be configured via `.env` file
@@ -155,7 +155,7 @@ Once your repo is live, monitor:
 - 📥 **Clones** - Installation attempts
 - 🌐 **Traffic** - Views and unique visitors
 
-Access these at: https://github.com/antonpme/nano-banana/pulse
+Access these at: https://github.com/antonpme/nano-banana-studio/pulse
 
 ---
 
@@ -181,7 +181,7 @@ Your project is now open source and ready for the world!
 
 ---
 
-**Repository**: https://github.com/antonpme/nano-banana  
+**Repository**: https://github.com/antonpme/nano-banana-studio  
 **Your Profile**: https://github.com/antonpme  
 **Version**: v1.0.0-beta  
 **License**: MIT  
